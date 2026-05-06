@@ -1,146 +1,106 @@
-import Image from "next/image";
+import { Header } from "@/components/header";
+import { Footer } from "@/components/footer";
 
 export default function PrivacyPolicy() {
   return (
-    <div className="min-h-screen bg-zinc-950 text-white py-12 px-6">
-      <div className="max-w-3xl mx-auto">
-        <div className="flex items-center gap-3 mb-10">
-          <div>
-            <Image
-              src="/logo.png"
-              alt="Google Play"
-              width={180}
-              height={100}
-              className="hover:scale-105 transition w-8 h-8"
-            />
-          </div>
-          <h1 className="text-3xl font-bold">KENY</h1>
-        </div>
-
-        <h2 className="text-4xl font-bold mb-2">Política de Privacidade</h2>
-        <p className="text-zinc-500 mb-12">
-          Última atualização: 04 de Maio de 2026
-        </p>
-
-        <div className="prose prose-invert max-w-none text-zinc-300 space-y-10">
-          <section>
-            <p>
-              A sua privacidade é importante para nós. Esta Política de
-              Privacidade explica como a KENY recolhe, utiliza, armazena e
-              protege os seus dados pessoais.
-            </p>
-          </section>
-
-          <section>
-            <h3 className="text-2xl font-semibold mb-4">
-              1. Dados que Recolhemos
-            </h3>
-            <ul className="list-disc pl-6 space-y-2">
-              <li>Informações de conta (nome, email, foto de perfil)</li>
-              <li>Dados de autenticação (senha encriptada)</li>
-              <li>Conteúdos enviados: PDFs, fotos de cadernos e textos</li>
-              <li>Resultados dos quizzes e relatórios de desempenho</li>
-              <li>Informações de assinatura</li>
-              <li>
-                Dados de uso da aplicação (interações, quizzes realizados)
-              </li>
-              <li>Informações técnicas (dispositivo, versão do SO, IP)</li>
-            </ul>
-          </section>
-
-          <section>
-            <h3 className="text-2xl font-semibold mb-4">
-              2. Como Utilizamos os Seus Dados
-            </h3>
-            <ul className="list-disc pl-6 space-y-2">
-              <li>
-                Fornecer e melhorar o serviço de geração de quizzes por IA
-              </li>
-              <li>Personalizar a sua experiência de aprendizagem</li>
-              <li>Gerir a sua conta e planos de assinatura</li>
-              <li>Enviar notificações importantes sobre a conta</li>
-              <li>Analisar o uso da aplicação para melhorias</li>
-              <li>Cumprir obrigações legais</li>
-            </ul>
-          </section>
-
-          <section>
-            <h3 className="text-2xl font-semibold mb-4">
-              3. Partilha de Dados
-            </h3>
-            <p className="mb-4">
-              Não vendemos os seus dados pessoais. Podemos partilhar dados
-              apenas nas seguintes situações:
-            </p>
-            <ul className="list-disc pl-6 space-y-2">
-              <li>
-                Com prestadores de serviços (ex: hospedagem, IA, pagamentos)
-              </li>
-              <li>Quando exigido por lei ou autoridades competentes</li>
-              <li>
-                Para proteger os direitos, segurança e propriedade da KENY
-              </li>
-            </ul>
-          </section>
-
-          <section>
-            <h3 className="text-2xl font-semibold mb-4">
-              4. Segurança dos Dados
-            </h3>
-            <p>
-              Utilizamos medidas técnicas e organizacionais adequadas para
-              proteger os seus dados contra acesso não autorizado, alteração,
-              divulgação ou destruição.
-            </p>
-          </section>
-
-          <section>
-            <h3 className="text-2xl font-semibold mb-4">
-              5. Eliminação da Conta
-            </h3>
-            <p>
-              Pode eliminar a sua conta a qualquer momento diretamente na
-              aplicação, indo ao <strong>Perfil → Eliminar Conta</strong>. Após
-              a eliminação, os seus dados pessoais serão removidos conforme
-              descrito na página de Eliminação de Conta.
-            </p>
-          </section>
-
-          <section>
-            <h3 className="text-2xl font-semibold mb-4">6. Seus Direitos</h3>
-            <p className="mb-4">Como utilizador, tem o direito de:</p>
-            <ul className="list-disc pl-6 space-y-2">
-              <li>Aceder aos seus dados pessoais</li>
-              <li>Retificar dados incorretos</li>
-              <li>Eliminar a sua conta e dados</li>
-              <li>Revogar consentimentos</li>
-            </ul>
-          </section>
-
-          <section>
-            <h3 className="text-2xl font-semibold mb-4">7. Contacto</h3>
-            <p>
-              Para qualquer questão relacionada com esta Política de Privacidade
-              ou tratamento dos seus dados, entre em contacto connosco:
-            </p>
-            <p className="mt-4">
-              <strong>Email:</strong>{" "}
-              <a
-                href="mailto:privacidade@keny.app"
-                className="text-emerald-400 hover:underline"
-              >
-                privacidade@keny.app
-              </a>
-            </p>
-          </section>
-        </div>
-
-        <div className="mt-16 pt-8 border-t border-white/10 text-center text-sm text-zinc-500">
-          <p>
-            KENY © {new Date().getFullYear()} • Todos os direitos reservados
+    <div className="min-h-screen bg-background flex flex-col">
+      <Header />
+      <main className="flex-1 py-32 px-6">
+        <div className="max-w-3xl mx-auto">
+          <h2 className="text-sm font-bold tracking-[0.2em] uppercase text-primary mb-4">Legal</h2>
+          <h1 className="text-4xl md:text-5xl font-black tracking-tight mb-2">Privacy Policy</h1>
+          <p className="text-muted-foreground mb-12 font-medium">
+            Last updated: May 4, 2026
           </p>
+
+          <div className="prose prose-zinc dark:prose-invert max-w-none space-y-12 text-muted-foreground leading-relaxed">
+            <section>
+              <p className="text-lg">
+                Your privacy is important to us. This Privacy Policy explains how KENY collects, uses, stores, and protects your personal data.
+              </p>
+            </section>
+
+            <section className="space-y-4">
+              <h3 className="text-2xl font-bold text-foreground">1. Data We Collect</h3>
+              <ul className="list-disc pl-6 space-y-2">
+                <li>Account information (name, email, profile photo)</li>
+                <li>Authentication data (encrypted password)</li>
+                <li>Uploaded content: PDFs, notebook photos, and text</li>
+                <li>Quiz results and performance reports</li>
+                <li>Subscription information</li>
+                <li>Application usage data (interactions, completed quizzes)</li>
+                <li>Technical information (device, OS version, IP)</li>
+              </ul>
+            </section>
+
+            <section className="space-y-4">
+              <h3 className="text-2xl font-bold text-foreground">2. How We Use Your Data</h3>
+              <ul className="list-disc pl-6 space-y-2">
+                <li>Provide and improve the AI quiz generation service</li>
+                <li>Personalize your learning experience</li>
+                <li>Manage your account and subscription plans</li>
+                <li>Send important account notifications</li>
+                <li>Analyze app usage for improvements</li>
+                <li>Comply with legal obligations</li>
+              </ul>
+            </section>
+
+            <section className="space-y-4">
+              <h3 className="text-2xl font-bold text-foreground">3. Data Sharing</h3>
+              <p>
+                We do not sell your personal data. We may share data only in the following situations:
+              </p>
+              <ul className="list-disc pl-6 space-y-2">
+                <li>With service providers (e.g., hosting, AI, payments)</li>
+                <li>When required by law or competent authorities</li>
+                <li>To protect the rights, safety, and property of KENY</li>
+              </ul>
+            </section>
+
+            <section className="space-y-4">
+              <h3 className="text-2xl font-bold text-foreground">4. Data Security</h3>
+              <p>
+                We use appropriate technical and organizational measures to protect your data against unauthorized access, alteration, disclosure, or destruction.
+              </p>
+            </section>
+
+            <section className="space-y-4">
+              <h3 className="text-2xl font-bold text-foreground">5. Account Deletion</h3>
+              <p>
+                You can delete your account at any time directly in the application by going to <strong>Profile → Delete Account</strong>. After deletion, your personal data will be removed as described on the Account Deletion page.
+              </p>
+            </section>
+
+            <section className="space-y-4">
+              <h3 className="text-2xl font-bold text-foreground">6. Your Rights</h3>
+              <p>As a user, you have the right to:</p>
+              <ul className="list-disc pl-6 space-y-2">
+                <li>Access your personal data</li>
+                <li>Rectify incorrect data</li>
+                <li>Delete your account and data</li>
+                <li>Revoke consent</li>
+              </ul>
+            </section>
+
+            <section className="space-y-4">
+              <h3 className="text-2xl font-bold text-foreground">7. Contact</h3>
+              <p>
+                For any questions regarding this Privacy Policy or the processing of your data, please contact us:
+              </p>
+              <p className="mt-4">
+                <strong>Email:</strong>{" "}
+                <a
+                  href="mailto:privacy@keny.app"
+                  className="text-primary hover:underline font-bold"
+                >
+                  privacy@keny.app
+                </a>
+              </p>
+            </section>
+          </div>
         </div>
-      </div>
+      </main>
+      <Footer />
     </div>
   );
 }

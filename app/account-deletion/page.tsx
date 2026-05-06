@@ -1,98 +1,81 @@
-import Image from "next/image";
+import { Header } from "@/components/header";
+import { Footer } from "@/components/footer";
 
 export default function AccountDeletion() {
   return (
-    <div className="min-h-screen bg-zinc-950 text-white py-12 px-6">
-      <div className="max-w-3xl mx-auto">
-        <div className="flex items-center gap-3 mb-10">
-          <div>
-            <Image
-              src="/logo.png"
-              alt="Google Play"
-              width={180}
-              height={100}
-              className="hover:scale-105 transition w-8 h-8"
-            />
-          </div>
-          <h1 className="text-3xl font-bold">KENY</h1>
-        </div>
+    <div className="min-h-screen bg-background flex flex-col">
+      <Header />
+      <main className="flex-1 py-32 px-6">
+        <div className="max-w-3xl mx-auto">
+          <h2 className="text-sm font-bold tracking-[0.2em] uppercase text-primary mb-4">Support</h2>
+          <h1 className="text-4xl md:text-5xl font-black tracking-tight mb-12">Account Deletion</h1>
 
-        <h2 className="text-4xl font-bold mb-8">Eliminar Conta</h2>
-
-        <div className="prose prose-invert max-w-none text-zinc-300">
-          <p className="text-lg">
-            Se desejar eliminar a sua conta KENY, pode fazê-lo diretamente na
-            aplicação.
-          </p>
-
-          <h3 className="text-2xl font-semibold mt-10 mb-4">
-            Como eliminar a sua conta:
-          </h3>
-
-          <ol className="list-decimal pl-6 space-y-4 text-lg">
-            <li>
-              Abra a aplicação <strong>KENY</strong>
-            </li>
-            <li>
-              Vá ao seu <strong>Perfil</strong> (ícone no canto inferior
-              direito)
-            </li>
-            <li>
-              Toque em <strong>&quot;Eliminar Conta&quot;</strong>
-            </li>
-            <li>Escolha o motivo da eliminação</li>
-            <li>Confirme a eliminação</li>
-          </ol>
-
-          <div className="mt-10 p-6 bg-zinc-900 rounded-2xl border border-red-500/20">
-            <p className="text-red-400 font-medium">
-              Esta ação é irreversível. Após a eliminação, não poderá recuperar
-              os seus dados.
+          <div className="prose prose-zinc dark:prose-invert max-w-none text-muted-foreground leading-relaxed space-y-12">
+            <p className="text-lg">
+              If you wish to delete your KENY account, you can do so directly within the application.
             </p>
+
+            <section className="space-y-6">
+              <h3 className="text-2xl font-bold text-foreground">How to delete your account:</h3>
+              <ol className="list-decimal pl-6 space-y-4 text-lg">
+                <li>
+                  Open the <strong>KENY</strong> app
+                </li>
+                <li>
+                  Go to your <strong>Profile</strong> (bottom right icon)
+                </li>
+                <li>
+                  Tap on <strong>&quot;Delete Account&quot;</strong>
+                </li>
+                <li>Choose the reason for deletion</li>
+                <li>Confirm the deletion</li>
+              </ol>
+            </section>
+
+            <div className="p-8 bg-destructive/10 rounded-3xl border border-destructive/20">
+              <p className="text-destructive font-bold text-lg">
+                This action is irreversible. Once deleted, you will not be able to recover your data.
+              </p>
+            </div>
+
+            <section className="space-y-6">
+              <h3 className="text-2xl font-bold text-foreground">What data is deleted?</h3>
+              <ul className="list-disc pl-6 space-y-3">
+                <li>Your profile data (name, email, photo)</li>
+                <li>History of completed quizzes</li>
+                <li>Performance reports</li>
+                <li>Uploaded documents and content</li>
+                <li>Subscription information</li>
+              </ul>
+            </section>
+
+            <section className="space-y-6">
+              <h3 className="text-2xl font-bold text-foreground">Data we may retain temporarily:</h3>
+              <ul className="list-disc pl-6 space-y-3">
+                <li>Technical log records (for up to 30 days)</li>
+                <li>Anonymized data for service improvement</li>
+              </ul>
+            </section>
+
+            <p className="text-sm">
+              Account deletion is processed immediately, but it may take up to 30 days for all data to be completely removed from our backups.
+            </p>
+
+            <div className="pt-8 border-t border-border">
+              <p>
+                If you have any questions, please contact us at:{" "}
+                <a
+                  href="mailto:support@keny.app"
+                  className="text-primary hover:underline font-bold"
+                >
+                  support@keny.app
+                </a>
+              </p>
+            </div>
           </div>
-
-          <h3 className="text-2xl font-semibold mt-12 mb-4">
-            Quais dados são eliminados?
-          </h3>
-
-          <ul className="list-disc pl-6 space-y-3">
-            <li>Os seus dados de perfil (nome, email, foto)</li>
-            <li>Histórico de quizzes realizados</li>
-            <li>Relatórios de desempenho</li>
-            <li>Documentos e conteúdos carregados</li>
-            <li>Informações sobre assinaturas</li>
-          </ul>
-
-          <h3 className="text-2xl font-semibold mt-12 mb-4">
-            Dados que podemos manter temporariamente:
-          </h3>
-          <ul className="list-disc pl-6 space-y-3">
-            <li>Registros de logs técnicos (por até 30 dias)</li>
-            <li>Dados anonimizados para melhoria do serviço</li>
-          </ul>
-
-          <p className="mt-10 text-sm text-zinc-500">
-            A eliminação da conta é processada imediatamente, mas pode demorar
-            até 30 dias para que todos os dados sejam completamente removidos
-            dos nossos backups.
-          </p>
         </div>
-
-        <div className="mt-16 pt-8 border-t border-white/10 text-center text-sm text-zinc-500">
-          <p>
-            Qualquer dúvida, entre em contacto connosco através do email:{" "}
-            <a
-              href="mailto:suporte@keny.app"
-              className="text-emerald-400 hover:underline"
-            >
-              suporte@keny.app
-            </a>
-          </p>
-          <p className="mt-6">
-            KENY © {new Date().getFullYear()} • Todos os direitos reservados
-          </p>
-        </div>
-      </div>
+      </main>
+      <Footer />
     </div>
   );
 }
