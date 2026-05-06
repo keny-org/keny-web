@@ -1,13 +1,13 @@
 "use client";
 
+import { Footer } from "@/components/footer";
+import { Header } from "@/components/header";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect } from "react";
-import { Header } from "@/components/header";
-import { Footer } from "@/components/footer";
-import { Card, CardContent } from "@/components/ui/card";
 
 export default function QuizRedirect() {
   const { id } = useParams();
@@ -36,13 +36,14 @@ export default function QuizRedirect() {
               <span className="text-primary">validate your knowledge?</span>
             </h1>
             <p className="text-muted-foreground text-lg leading-relaxed">
-              A personalized quiz has been shared with you. Open the app to start the challenge!
+              A personalized quiz has been shared with you. Open the app to
+              start the challenge!
             </p>
           </div>
 
-          <Card className="border-border bg-card shadow-2xl overflow-hidden rounded-[2.5rem]">
+          <Card className="border-border bg-card shadow-2xl overflow-hidden">
             <CardContent className="p-10 space-y-8">
-              <div className="w-24 h-24 bg-primary/10 rounded-3xl flex items-center justify-center mx-auto border border-primary/20">
+              <div className="w-24 h-24 bg-primary/10  flex items-center justify-center mx-auto border border-primary/20">
                 <Image
                   src="/logo.png"
                   alt="Keny"
@@ -56,12 +57,13 @@ export default function QuizRedirect() {
                 <Button
                   onClick={handleOpenApp}
                   size="lg"
-                  className="w-full h-16 rounded-2xl text-lg font-bold shadow-lg shadow-primary/20"
+                  className="w-full h-16 text-lg font-bold shadow-lg shadow-primary/20"
                 >
                   Open Quiz in App
                 </Button>
                 <p className="text-sm text-muted-foreground font-medium">
-                  If the app doesn&apos;t open automatically, click the button above.
+                  If the app doesn&apos;t open automatically, click the button
+                  above.
                 </p>
               </div>
             </CardContent>
@@ -83,10 +85,14 @@ export default function QuizRedirect() {
               <Button
                 variant="outline"
                 size="lg"
-                className="h-14 px-8 rounded-xl font-bold border-2"
+                className="h-14 px-8 font-bold border-2"
                 asChild
               >
-                <Link href={playStoreUrl} target="_blank" rel="noopener noreferrer">
+                <Link
+                  href={playStoreUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   <Image
                     src="/google-play.svg"
                     alt="Google Play"
@@ -100,7 +106,7 @@ export default function QuizRedirect() {
               <Button
                 variant="outline"
                 size="lg"
-                className="h-14 px-8 rounded-xl font-bold border-2 opacity-50 cursor-not-allowed"
+                className="h-14 px-8 font-bold border-2 opacity-50 cursor-not-allowed"
               >
                 <Image
                   src="/app-store.svg"

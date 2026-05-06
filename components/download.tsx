@@ -28,7 +28,7 @@ export function Download() {
               <Button
                 size="lg"
                 variant="secondary"
-                className="h-16 px-8 rounded-2xl text-lg font-bold group"
+                className="h-16 px-8 text-lg font-bold group"
                 asChild
               >
                 <Link href="https://play.google.com/store/apps/details?id=com.keny.mobile">
@@ -41,20 +41,6 @@ export function Download() {
                   />
                   Google Play
                 </Link>
-              </Button>
-              <Button
-                size="lg"
-                variant="secondary"
-                className="h-16 px-8 rounded-2xl text-lg font-bold opacity-50 cursor-not-allowed"
-              >
-                <Image
-                  src="/app-store.svg"
-                  alt="App Store"
-                  width={24}
-                  height={24}
-                  className="mr-3 w-6 h-6"
-                />
-                App Store
               </Button>
             </div>
             <p className="text-sm font-medium opacity-70">
