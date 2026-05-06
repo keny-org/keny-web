@@ -96,7 +96,7 @@ export default function Home() {
             </div>
 
             <div className="text-sm text-emerald-400 flex items-center gap-2">
-              ✓ 500 K-Coins grátis no primeiro cadastro
+              ✓ Acesso ilimitado ao sistema de quizzes
             </div>
           </div>
 
@@ -180,8 +180,8 @@ export default function Home() {
                 strokeWidth={1.5}
                 className="w-12 h-12 text-emerald-500 mb-6"
               />
-              <h3 className="text-xl font-semibold mb-2">K-Coins</h3>
-              <p className="text-zinc-400">Sistema justo de uso sustentável</p>
+              <h3 className="text-xl font-semibold mb-2">Assinaturas</h3>
+              <p className="text-zinc-400">Acesso total sem limites</p>
             </div>
           </div>
         </div>
@@ -217,7 +217,7 @@ export default function Home() {
                   <div>
                     <h4 className="font-semibold mb-1">Testa e evolui</h4>
                     <p className="text-zinc-400">
-                      Recebe relatório detalhado + K-Coins
+                      Recebe relatório detalhado e evolui
                     </p>
                   </div>
                 </div>
@@ -243,11 +243,26 @@ export default function Home() {
             Pronto para validar teu conhecimento?
           </h2>
           <p className="text-xl mb-10 text-white/90">
-            Começa hoje com 500 K-Coins grátis
+            Acesso ilimitado a todos os recursos
           </p>
           <Button size={"lg"}>Descarregar KENY Grátis</Button>
         </div>
       </section>
+      <footer className="py-12 bg-zinc-950 border-t border-white/5">
+        <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
+          <p className="text-zinc-500 text-sm">
+            KENY © {new Date().getFullYear()} • Todos os direitos reservados
+          </p>
+          <div className="flex gap-6 text-sm">
+            <Link href="/privacy-policy" className="text-zinc-400 hover:text-emerald-400 transition">
+              Política de Privacidade
+            </Link>
+            <Link href="/account-deletion" className="text-zinc-400 hover:text-emerald-400 transition">
+              Excluir Conta
+            </Link>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }

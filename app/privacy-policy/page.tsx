@@ -40,7 +40,7 @@ export default function PrivacyPolicy() {
               <li>Dados de autenticação (senha encriptada)</li>
               <li>Conteúdos enviados: PDFs, fotos de cadernos e textos</li>
               <li>Resultados dos quizzes e relatórios de desempenho</li>
-              <li>Saldo de K-Coins e histórico de transações</li>
+              <li>Informações de assinatura</li>
               <li>
                 Dados de uso da aplicação (interações, quizzes realizados)
               </li>
@@ -57,7 +57,7 @@ export default function PrivacyPolicy() {
                 Fornecer e melhorar o serviço de geração de quizzes por IA
               </li>
               <li>Personalizar a sua experiência de aprendizagem</li>
-              <li>Gerir a sua conta e saldo de K-Coins</li>
+              <li>Gerir a sua conta e planos de assinatura</li>
               <li>Enviar notificações importantes sobre a conta</li>
               <li>Analisar o uso da aplicação para melhorias</li>
               <li>Cumprir obrigações legais</li>

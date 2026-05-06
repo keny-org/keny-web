@@ -60,7 +60,7 @@ export default function AccountDeletion() {
             <li>Histórico de quizzes realizados</li>
             <li>Relatórios de desempenho</li>
             <li>Documentos e conteúdos carregados</li>
-            <li>Saldo de K-Coins</li>
+            <li>Informações sobre assinaturas</li>
           </ul>
 
           <h3 className="text-2xl font-semibold mt-12 mb-4">
