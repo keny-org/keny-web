@@ -38,14 +38,30 @@ const features = [
 
 function HeroHeader() {
   return (
-    <section className="relative h-[80vh] flex flex-col items-center justify-center overflow-hidden">
+    <section className="relative h-dvh flex flex-col items-center justify-center overflow-hidden">
       <div className="absolute inset-0 z-0 pointer-events-none">
+        {/* Smooth multi-point gradient */}
         <div
-          className="absolute inset-0 opacity-[0.03] dark:opacity-[0.05]"
+          className="absolute inset-0 opacity-20 dark:opacity-30 blur-[120px]"
+          style={{
+            background: `
+              radial-gradient(circle at 100% 0%, var(--primary) 0%, transparent 50%),
+              radial-gradient(circle at 0% 100%, var(--primary) 0%, transparent 50%),
+              radial-gradient(circle at 80% 50%, var(--primary) 0%, transparent 30%),
+              radial-gradient(circle at 20% 50%, var(--primary) 0%, transparent 30%)
+            `,
+          }}
+        />
+
+        {/* Refined Grid Pattern */}
+        <div
+          className="absolute inset-0 opacity-[0.05] dark:opacity-[0.1]"
           style={{
             backgroundImage: `linear-gradient(to right, currentColor 1px, transparent 1px), linear-gradient(to bottom, currentColor 1px, transparent 1px)`,
-            backgroundSize: "40px 40px",
+            backgroundSize: "60px 60px",
             color: "var(--primary)",
+            maskImage:
+              "radial-gradient(ellipse at center, black, transparent 80%)",
           }}
         />
       </div>
