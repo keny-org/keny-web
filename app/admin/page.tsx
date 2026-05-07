@@ -30,8 +30,7 @@ const COLORS = ["#3b82f6", "#10b981", "#f59e0b", "#ef4444"];
 export default function DashboardPage() {
   const [stats, setStats] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
-￼
-Adão Ângelo
+
   useEffect(() => {
     const fetchStats = async () => {
       try {
