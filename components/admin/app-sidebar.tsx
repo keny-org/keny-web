@@ -11,7 +11,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import { Image, LayoutDashboard, Settings, Users } from "lucide-react"
+import { CreditCard, Image, LayoutDashboard, Settings, Users } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 
@@ -30,6 +30,11 @@ const items = [
     title: "Usuários",
     url: "/admin/users",
     icon: Users,
+  },
+  {
+    title: "Subscrições",
+    url: "/admin/subscriptions",
+    icon: CreditCard,
   },
   {
     title: "Configurações",

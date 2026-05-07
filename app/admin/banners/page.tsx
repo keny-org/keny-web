@@ -20,9 +20,18 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useBanners } from "@/hooks/banners/use-banners";
-import { Image as ImageIcon, Plus, Power, Trash } from "lucide-react";
+import { Banner } from "@/types/banner";
+import {
+  Add01Icon,
+  Cancel01Icon,
+  Delete02Icon,
+  Image01Icon,
+  PencilEdit01Icon,
+  PowerIcon,
+} from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function BannersPage() {
   const {
@@ -32,10 +41,12 @@ export default function BannersPage() {
     createBanner,
     deleteBanner,
     toggleBannerStatus,
+    updateBanner,
   } = useBanners();
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [newBanner, setNewBanner] = useState({
+  const [editingBanner, setEditingBanner] = useState<Banner | null>(null);
+  const [formData, setFormData] = useState({
     title: "",
     subtitle: "",
     tag: "",
@@ -43,33 +54,78 @@ export default function BannersPage() {
     order: 0,
     file: null as File | null,
   });
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     fetchBanners();
   }, [fetchBanners]);
 
-  const handleCreate = async (e: React.FormEvent) => {
+  const resetForm = () => {
+    setFormData({
+      title: "",
+      subtitle: "",
+      tag: "",
+      isActive: true,
+      order: 0,
+      file: null,
+    });
+    setPreviewUrl(null);
+    setEditingBanner(null);
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] || null;
+    setFormData({ ...formData, file });
+    if (file) {
+      const url = URL.createObjectURL(file);
+      setPreviewUrl(url);
+    }
+  };
+
+  const handleCreateOrUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newBanner.file || !newBanner.title) return;
 
     try {
-      await createBanner({
-        ...newBanner,
-        file: newBanner.file,
-      });
+      if (editingBanner) {
+        await updateBanner(editingBanner.id, {
+          title: formData.title,
+          subtitle: formData.subtitle,
+          tag: formData.tag,
+          isActive: formData.isActive,
+          order: formData.order,
+        });
+      } else {
+        if (!formData.file) return;
+        await createBanner({
+          ...formData,
+          file: formData.file,
+        });
+      }
       setIsDialogOpen(false);
-      setNewBanner({
-        title: "",
-        subtitle: "",
-        tag: "",
-        isActive: true,
-        order: 0,
-        file: null,
-      });
+      setEditingBanner(null);
     } catch (error) {
       console.error(error);
-      // toast handled in hook
     }
+  };
+
+  const openEditModal = (banner: Banner) => {
+    setEditingBanner(banner);
+    setFormData({
+      title: banner.title,
+      subtitle: banner.subtitle || "",
+      tag: banner.tag || "",
+      isActive: banner.isActive,
+      order: banner.order,
+      file: null,
+    });
+    setPreviewUrl(banner.imageUrl);
+    setIsDialogOpen(true);
+  };
+
+  const closeDialog = () => {
+    setIsDialogOpen(false);
+    resetForm();
   };
 
   return (
@@ -82,25 +138,93 @@ export default function BannersPage() {
           </p>
         </div>
 
-        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <Dialog
+          open={isDialogOpen}
+          onOpenChange={(open) => !open && closeDialog()}
+        >
           <DialogTrigger asChild>
-            <Button className="gap-2">
-              <Plus className="h-4 w-4" />
+            <Button
+              className="gap-2"
+              onClick={() => {
+                resetForm();
+                setIsDialogOpen(true);
+              }}
+            >
+              <HugeiconsIcon icon={Add01Icon} size={16} />
               Novo Banner
             </Button>
           </DialogTrigger>
-          <DialogContent>
+          <DialogContent className="sm:max-w-[500px]">
             <DialogHeader>
-              <DialogTitle>Criar Novo Banner</DialogTitle>
+              <DialogTitle>
+                {editingBanner ? "Editar Banner" : "Criar Novo Banner"}
+              </DialogTitle>
             </DialogHeader>
-            <form onSubmit={handleCreate} className="space-y-4 pt-4">
+            <form onSubmit={handleCreateOrUpdate} className="space-y-4 pt-4">
+              <div className="flex flex-col items-center gap-4 py-4">
+                <div className="relative h-32 w-full max-w-[300px] rounded-lg overflow-hidden bg-muted flex items-center justify-center border-2 border-dashed">
+                  {previewUrl ? (
+                    <>
+                      <Image
+                        src={previewUrl}
+                        alt="Preview"
+                        fill
+                        className="object-cover"
+                      />
+                      {!editingBanner && (
+                        <Button
+                          type="button"
+                          variant="destructive"
+                          size="icon"
+                          className="absolute top-2 right-2 h-6 w-6"
+                          onClick={() => {
+                            setPreviewUrl(null);
+                            setFormData({ ...formData, file: null });
+                            if (fileInputRef.current)
+                              fileInputRef.current.value = "";
+                          }}
+                        >
+                          <HugeiconsIcon icon={Cancel01Icon} size={12} />
+                        </Button>
+                      )}
+                    </>
+                  ) : (
+                    <div className="flex flex-col items-center gap-2 text-muted-foreground">
+                      <HugeiconsIcon icon={Image01Icon} size={32} />
+                      <span className="text-xs">
+                        Nenhuma imagem selecionada
+                      </span>
+                    </div>
+                  )}
+                </div>
+                {!editingBanner && (
+                  <div className="w-full">
+                    <Label htmlFor="file" className="cursor-pointer">
+                      <div className="flex items-center justify-center gap-2 px-4 py-2 border rounded-md hover:bg-muted transition-colors">
+                        <HugeiconsIcon icon={Add01Icon} size={16} />
+                        Selecionar Imagem
+                      </div>
+                    </Label>
+                    <Input
+                      id="file"
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      ref={fileInputRef}
+                      onChange={handleFileChange}
+                      required={!editingBanner}
+                    />
+                  </div>
+                )}
+              </div>
+
               <div className="space-y-2">
                 <Label htmlFor="title">Título</Label>
                 <Input
                   id="title"
-                  value={newBanner.title}
+                  value={formData.title}
                   onChange={(e) =>
-                    setNewBanner({ ...newBanner, title: e.target.value })
+                    setFormData({ ...formData, title: e.target.value })
                   }
                   required
                 />
@@ -109,9 +233,9 @@ export default function BannersPage() {
                 <Label htmlFor="subtitle">Subtítulo</Label>
                 <Input
                   id="subtitle"
-                  value={newBanner.subtitle}
+                  value={formData.subtitle}
                   onChange={(e) =>
-                    setNewBanner({ ...newBanner, subtitle: e.target.value })
+                    setFormData({ ...formData, subtitle: e.target.value })
                   }
                 />
               </div>
@@ -120,9 +244,9 @@ export default function BannersPage() {
                   <Label htmlFor="tag">Tag</Label>
                   <Input
                     id="tag"
-                    value={newBanner.tag}
+                    value={formData.tag}
                     onChange={(e) =>
-                      setNewBanner({ ...newBanner, tag: e.target.value })
+                      setFormData({ ...formData, tag: e.target.value })
                     }
                   />
                 </div>
@@ -131,44 +255,47 @@ export default function BannersPage() {
                   <Input
                     id="order"
                     type="number"
-                    value={newBanner.order}
+                    value={formData.order}
                     onChange={(e) =>
-                      setNewBanner({
-                        ...newBanner,
-                        order: parseInt(e.target.value),
+                      setFormData({
+                        ...formData,
+                        order: parseInt(e.target.value) || 0,
                       })
                     }
                   />
                 </div>
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="file">Imagem</Label>
-                <Input
-                  id="file"
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) =>
-                    setNewBanner({
-                      ...newBanner,
-                      file: e.target.files?.[0] || null,
-                    })
-                  }
-                  required
-                />
-              </div>
-              <div className="flex items-center gap-2">
+
+              <div className="flex items-center gap-2 pt-2">
                 <Switch
                   id="isActive"
-                  checked={newBanner.isActive}
+                  checked={formData.isActive}
                   onCheckedChange={(checked) =>
-                    setNewBanner({ ...newBanner, isActive: checked })
+                    setFormData({ ...formData, isActive: checked })
                   }
                 />
                 <Label htmlFor="isActive">Ativo</Label>
               </div>
-              <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading ? "Criando..." : "Criar Banner"}
-              </Button>
+
+              <div className="flex gap-2 pt-4">
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="flex-1"
+                  onClick={closeDialog}
+                >
+                  Cancelar
+                </Button>
+                <Button type="submit" className="flex-1" disabled={isLoading}>
+                  {isLoading
+                    ? editingBanner
+                      ? "Salvando..."
+                      : "Criando..."
+                    : editingBanner
+                      ? "Salvar Alterações"
+                      : "Criar Banner"}
+                </Button>
+              </div>
             </form>
           </DialogContent>
         </Dialog>
@@ -209,7 +336,11 @@ export default function BannersPage() {
                           className="object-cover"
                         />
                       ) : (
-                        <ImageIcon className="h-6 w-6 text-muted-foreground" />
+                        <HugeiconsIcon
+                          icon={Image01Icon}
+                          size={24}
+                          className="text-muted-foreground"
+                        />
                       )}
                     </div>
                   </TableCell>
@@ -222,21 +353,43 @@ export default function BannersPage() {
                     </div>
                   </TableCell>
                   <TableCell>
-                    <span className="px-2 py-1 rounded-full bg-secondary text-secondary-foreground text-xs">
-                      {banner.tag || "N/A"}
-                    </span>
+                    {banner.tag ? (
+                      <span className="px-2 py-1 rounded-full bg-secondary text-secondary-foreground text-xs font-medium">
+                        {banner.tag}
+                      </span>
+                    ) : (
+                      <span className="text-muted-foreground text-xs italic">
+                        Sem tag
+                      </span>
+                    )}
                   </TableCell>
                   <TableCell>{banner.order}</TableCell>
                   <TableCell>
                     <div className="flex items-center gap-2">
                       <div
-                        className={`h-2 w-2 rounded-full ${banner.isActive ? "bg-green-500" : "bg-red-500"}`}
+                        className={`h-2 w-2 rounded-full ${banner.isActive ? "bg-primary shadow-[0_0_8px_rgba(34,197,94,0.6)]" : "bg-destructive shadow-[0_0_8px_rgba(239,68,68,0.6)]"}`}
                       />
-                      {banner.isActive ? "Ativo" : "Inativo"}
+                      <span
+                        className={
+                          banner.isActive
+                            ? "text-primary font-medium"
+                            : "text-destructive font-medium"
+                        }
+                      >
+                        {banner.isActive ? "Ativo" : "Inativo"}
+                      </span>
                     </div>
                   </TableCell>
                   <TableCell className="text-right">
-                    <div className="flex justify-end gap-2">
+                    <div className="flex justify-end gap-1">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => openEditModal(banner)}
+                        title="Editar"
+                      >
+                        <HugeiconsIcon icon={PencilEdit01Icon} size={18} />
+                      </Button>
                       <Button
                         variant="ghost"
                         size="icon"
@@ -245,8 +398,14 @@ export default function BannersPage() {
                         }
                         title={banner.isActive ? "Desativar" : "Ativar"}
                       >
-                        <Power
-                          className={`h-4 w-4 ${banner.isActive ? "text-green-500" : "text-muted-foreground"}`}
+                        <HugeiconsIcon
+                          icon={PowerIcon}
+                          size={18}
+                          className={
+                            banner.isActive
+                              ? "text-green-500"
+                              : "text-muted-foreground"
+                          }
                         />
                       </Button>
                       <Button
@@ -261,9 +420,10 @@ export default function BannersPage() {
                             deleteBanner(banner.id);
                           }
                         }}
-                        className="text-destructive"
+                        className="text-destructive hover:bg-destructive/10"
+                        title="Excluir"
                       >
-                        <Trash className="h-4 w-4" />
+                        <HugeiconsIcon icon={Delete02Icon} size={18} />
                       </Button>
                     </div>
                   </TableCell>

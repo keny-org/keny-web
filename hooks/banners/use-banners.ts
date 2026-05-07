@@ -1,6 +1,6 @@
 import { bannerService } from "@/services/banners";
 import { useBannerStore } from "@/store/use-banner-store";
-import { CreateBannerInput } from "@/types/banner";
+import { Banner, CreateBannerInput } from "@/types/banner";
 import { useCallback } from "react";
 import { toast } from "sonner";
 
@@ -10,7 +10,7 @@ export function useBanners() {
     setBanners, 
     addBanner, 
     removeBanner, 
-    updateBanner, 
+    updateBanner: updateStoreBanner, 
     isLoading, 
     setIsLoading 
   } = useBannerStore();
@@ -55,16 +55,32 @@ export function useBanners() {
     }
   }, [removeBanner]);
 
+  const updateBanner = useCallback(async (id: string, data: Partial<Banner>) => {
+    setIsLoading(true);
+    try {
+      const banner = await bannerService.update(id, data);
+      updateStoreBanner(banner);
+      toast.success("Banner atualizado com sucesso");
+      return banner;
+    } catch (error) {
+      toast.error("Erro ao atualizar banner");
+      console.error(error);
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  }, [updateStoreBanner, setIsLoading]);
+
   const toggleBannerStatus = useCallback(async (id: string, currentStatus: boolean) => {
     try {
       const updatedBanner = await bannerService.update(id, { isActive: !currentStatus });
-      updateBanner(updatedBanner);
+      updateStoreBanner(updatedBanner);
       toast.success(`Banner ${!currentStatus ? "ativado" : "desativado"} com sucesso`);
     } catch (error) {
       toast.error("Erro ao atualizar status do banner");
       console.error(error);
     }
-  }, [updateBanner]);
+  }, [updateStoreBanner]);
 
   return {
     banners,
@@ -73,5 +89,6 @@ export function useBanners() {
     createBanner,
     deleteBanner,
     toggleBannerStatus,
+    updateBanner,
   };
 }

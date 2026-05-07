@@ -1,11 +1,5 @@
 "use client";
 
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import Cookies from "js-cookie";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -16,21 +10,31 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { api } from "@/services/api";
+import { api } from "@/lib/api";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { UserIcon, ViewIcon, ViewOffIcon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
+import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import * as z from "zod";
 
 const LoginSchema = z.object({
-  phone: z.string().min(9, "Número inválido"),
-  password: z.string().min(6, "Senha muito curta"),
+  username: z.string().min(3, "Username inválido"),
+  password: z.string().min(4, "Senha muito curta"),
 });
 
 export default function LoginForm() {
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
 
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
-      phone: "",
+      username: "",
       password: "",
     },
   });
@@ -38,18 +42,20 @@ export default function LoginForm() {
   async function onSubmit(values: z.infer<typeof LoginSchema>) {
     setIsLoading(true);
     try {
-      const { data } = await api.post("/auth/login", {
-        phone: values.phone,
+      const { data } = await api.post("/admin/login", {
+        username: values.username,
         password: values.password,
       });
 
-      // Salvar token nos cookies (expira em 7 dias)
       Cookies.set("keny_token", data.accessToken, { expires: 7 });
 
       router.push("/admin");
     } catch (error) {
       console.error("Login error:", error);
-      form.setError("root", { message: "Erro ao realizar login. Verifique suas credenciais." });
+      toast.error("Erro ao realizar login", {
+        description:
+          "Verifique suas credenciais de administrador e tente novamente.",
+      });
     } finally {
       setIsLoading(false);
     }
@@ -58,21 +64,24 @@ export default function LoginForm() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        {form.formState.errors.root && (
-            <p className="text-sm font-medium text-destructive">{form.formState.errors.root.message}</p>
-        )}
         <FormField
           control={form.control}
-          name="phone"
+          name="username"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Número de telefone</FormLabel>
+              <FormLabel>Utilizador</FormLabel>
               <FormControl>
-                <div className="flex gap-2">
-                    <span className="flex items-center px-3 bg-secondary rounded-md border text-sm font-bold">
-                        +244
-                    </span>
-                    <Input placeholder="9XX XXX XXX" {...field} />
+                <div className="relative">
+                  <HugeiconsIcon
+                    icon={UserIcon}
+                    size={18}
+                    className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+                  />
+                  <Input
+                    placeholder="Seu username"
+                    className="pl-10"
+                    {...field}
+                  />
                 </div>
               </FormControl>
               <FormMessage />
@@ -86,14 +95,30 @@ export default function LoginForm() {
             <FormItem>
               <FormLabel>Senha</FormLabel>
               <FormControl>
-                <Input type="password" placeholder="Insira sua senha" {...field} />
+                <div className="relative">
+                  <Input
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Insira sua senha"
+                    {...field}
+                  />
+                  <button
+                    type="button"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    <HugeiconsIcon
+                      icon={showPassword ? ViewOffIcon : ViewIcon}
+                      size={18}
+                    />
+                  </button>
+                </div>
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button type="submit" className="w-full" disabled={isLoading}>
-          {isLoading ? "Entrando..." : "Entrar"}
+        <Button type="submit" className="w-full h-11" disabled={isLoading}>
+          {isLoading ? "Entrando..." : "Entrar no Admin"}
         </Button>
       </form>
     </Form>
