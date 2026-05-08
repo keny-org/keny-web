@@ -62,7 +62,7 @@ export function BannerFormDialog({
 
         <form onSubmit={onSubmit} className="space-y-4 pt-4">
           <div className="flex flex-col items-center gap-4 py-4">
-            <div className="relative flex h-32 w-full max-w-75 items-center justify-center overflow-hidden border-2 border-dashed bg-muted">
+            <div className="relative flex h-42 w-full items-center justify-center overflow-hidden border-2 border-dashed bg-muted">
               {previewUrl ? (
                 <>
                   <Image
