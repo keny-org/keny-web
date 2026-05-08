@@ -1,143 +1,146 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { useEffect, useState } from "react";
-import { 
-  Table, 
-  TableBody, 
-  TableCell, 
-  TableHead, 
-  TableHeader, 
-  TableRow 
-} from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { adminService } from "@/services/admin";
-import { toast } from "sonner";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { useSubscriptionRequests } from "@/hooks/admin/use-subscription-requests";
+import { CheckmarkCircle01Icon, UserIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { 
-  CheckmarkCircle01Icon, 
-  Clock01Icon, 
-  UserIcon,
-} from "@hugeicons/core-free-icons";
 
-export default function SubscriptionsPage() {
-  const [requests, setRequests] = useState<any[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+export default function SubscriptionRequestsPage() {
+  const { requests, isLoading, approveSubscription, isApproving } =
+    useSubscriptionRequests();
 
-  const fetchRequests = async () => {
-    setIsLoading(true);
-    try {
-      const data = await adminService.listSubscriptionRequests();
-      setRequests(data);
-    } catch (error) {
-      toast.error("Erro ao carregar pedidos de subscrição");
-      console.error(error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchRequests();
-  }, []);
-
-  const handleApprove = async (id: string) => {
-    try {
-      await adminService.approveSubscription(id);
-      toast.success("Subscrição aprovada com sucesso");
-      fetchRequests();
-    } catch (error) {
-      toast.error("Erro ao aprovar subscrição");
-      console.error(error);
+  const getStatusBadge = (status: string) => {
+    switch (status) {
+      case "ACTIVE":
+        return (
+          <span className="px-2 py-1 bg-primary/10 text-primary text-[10px] font-bold border border-primary/20">
+            ATIVA
+          </span>
+        );
+      case "PENDING":
+        return (
+          <span className="px-2 py-1 bg-yellow-500/10 text-yellow-500 text-[10px] font-bold border border-yellow-500/20">
+            PENDENTE
+          </span>
+        );
+      case "CANCELED":
+        return (
+          <span className="px-2 py-1 bg-destructive/10 text-destructive text-[10px] font-bold border border-destructive/20">
+            CANCELADA
+          </span>
+        );
+      default:
+        return (
+          <span className="px-2 py-1 rounded-full bg-muted text-muted-foreground text-[10px] font-bold">
+            {status}
+          </span>
+        );
     }
   };
 
   return (
     <div className="space-y-6">
-      <div>
-        <h3 className="text-xl font-semibold">Pedidos de Subscrição</h3>
-        <p className="text-muted-foreground">
-          Aprove ou rejeite pedidos de subscrição dos usuários.
-        </p>
-      </div>
+      <h3 className="text-xl font-semibold">Pedidos de Subscrição</h3>
 
-      <div className="rounded-md border bg-card">
+      <div className="border bg-card">
         <Table>
           <TableHeader>
             <TableRow>
               <TableHead>Usuário</TableHead>
               <TableHead>Plano</TableHead>
-              <TableHead>Valor</TableHead>
-              <TableHead>Data do Pedido</TableHead>
               <TableHead>Status</TableHead>
+              <TableHead>Pagamento</TableHead>
+              <TableHead>Data do Pedido</TableHead>
               <TableHead className="text-right">Ações</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {isLoading ? (
               <TableRow>
-                <TableCell colSpan={6} className="text-center py-10">Carregando...</TableCell>
+                <TableCell colSpan={6} className="text-center py-10">
+                  Carregando pedidos...
+                </TableCell>
               </TableRow>
             ) : requests.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={6} className="text-center py-10 text-muted-foreground">
+                <TableCell
+                  colSpan={6}
+                  className="text-center py-10 text-muted-foreground"
+                >
                   Nenhum pedido de subscrição encontrado.
                 </TableCell>
               </TableRow>
             ) : (
-              requests.map((request) => (
+              requests.map((request: any) => (
                 <TableRow key={request.id}>
                   <TableCell>
                     <div className="flex items-center gap-3">
-                      <div className="h-8 w-8 rounded-full bg-muted flex items-center justify-center">
-                        <HugeiconsIcon icon={UserIcon} size={16} className="text-muted-foreground" />
+                      <div className="h-8 w-8  bg-muted flex items-center justify-center">
+                        <HugeiconsIcon
+                          icon={UserIcon}
+                          size={14}
+                          className="text-muted-foreground"
+                        />
                       </div>
                       <div>
-                        <p className="text-sm font-medium">{request.user.fullName}</p>
-                        <p className="text-xs text-muted-foreground">{request.user.phone}</p>
+                        <p className="text-sm font-medium">
+                          {request.user?.fullName}
+                        </p>
+                        <p className="text-[10px] text-muted-foreground">
+                          {request.user?.phone}
+                        </p>
                       </div>
                     </div>
-                  </TableCell>
-                  <TableCell>
-                    <span className="font-medium">{request.plan.title}</span>
-                  </TableCell>
-                  <TableCell>
-                    <span className="text-sm">{request.plan.price}</span>
-                  </TableCell>
-                  <TableCell>
-                    <p className="text-sm">
-                      {new Date(request.createdAt).toLocaleDateString()}
-                    </p>
                   </TableCell>
                   <TableCell>
                     <div className="flex items-center gap-2">
-                       {request.status === 'PENDING' ? (
-                         <>
-                           <HugeiconsIcon icon={Clock01Icon} size={16} className="text-yellow-500" />
-                           <span className="text-xs font-medium text-yellow-600">Pendente</span>
-                         </>
-                       ) : request.status === 'ACTIVE' ? (
-                         <>
-                           <HugeiconsIcon icon={CheckmarkCircle01Icon} size={16} className="text-green-500" />
-                           <span className="text-xs font-medium text-green-600">Ativo</span>
-                         </>
-                       ) : (
-                         <span className="text-xs font-medium text-muted-foreground">{request.status}</span>
-                       )}
+                      <span className="text-sm font-bold">
+                        {request.plan?.title}
+                      </span>
+                    </div>
+                  </TableCell>
+                  <TableCell>{getStatusBadge(request.status)}</TableCell>
+                  <TableCell>
+                    {request.payments && request.payments.length > 0 ? (
+                      <div className="text-xs">
+                        <p className="font-medium">
+                          Ref: {request.payments[0].reference || "---"}
+                        </p>
+                        <p className="text-[10px] text-muted-foreground">
+                          {request.payments[0].value}
+                        </p>
+                      </div>
+                    ) : (
+                      <span className="text-xs text-muted-foreground">
+                        Nenhum
+                      </span>
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                      {new Date(request.createdAt).toLocaleDateString()}
                     </div>
                   </TableCell>
                   <TableCell className="text-right">
-                    {request.status === 'PENDING' && (
-                      <div className="flex justify-end gap-2">
-                        <Button 
-                          variant="outline" 
-                          size="sm" 
-                          className="h-8 gap-1 text-green-600 border-green-200 hover:bg-green-50"
-                          onClick={() => handleApprove(request.id)}
-                        >
-                          <HugeiconsIcon icon={CheckmarkCircle01Icon} size={14} />
-                          Aprovar
-                        </Button>
-                      </div>
+                    {request.status === "PENDING" && (
+                      <Button
+                        size="sm"
+                        className="gap-2"
+                        onClick={() => approveSubscription(request.id)}
+                        disabled={isApproving}
+                      >
+                        <HugeiconsIcon icon={CheckmarkCircle01Icon} size={16} />
+                        Aprovar
+                      </Button>
                     )}
                   </TableCell>
                 </TableRow>

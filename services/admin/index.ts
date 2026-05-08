@@ -1,7 +1,66 @@
 import { api } from "@/lib/api";
 
+export interface AdminUser {
+  id: string;
+  fullName: string;
+  username: string;
+  createdAt?: string;
+}
+
+export interface AdminFormInput {
+  fullName: string;
+  username: string;
+  password?: string;
+}
+
+interface AdminUserAccount {
+  id: string;
+  fullName: string;
+  phone: string;
+  email?: string | null;
+  avatarUrl?: string | null;
+  createdAt: string;
+  wallet?: {
+    kcoinsBalance: number;
+  } | null;
+  subscriptions?: Array<{
+    plan: {
+      title: string;
+    };
+  }>;
+}
+
+interface AdminSubscriptionRequest {
+  id: string;
+  status: string;
+  createdAt: string;
+  user?: {
+    fullName?: string;
+    phone?: string;
+  };
+  plan?: {
+    title?: string;
+  };
+  payments?: Array<{
+    reference?: string | null;
+    value?: string | null;
+  }>;
+}
+
+interface AdminStats {
+  counts: {
+    totalUsers: number;
+    totalAdmins: number;
+    pendingSubscriptions: number;
+    activeSubscriptions: number;
+  };
+  userGrowth: Array<{ date: string; count: number }>;
+  subscriptionStats: Array<{ plan: string; count: number }>;
+  recentRequests: AdminSubscriptionRequest[];
+}
+
 export const adminService = {
-  async listUsers(): Promise<any[]> {
+  async listUsers(): Promise<AdminUserAccount[]> {
     const response = await api.get("/admin/users");
     return response.data;
   },
@@ -10,7 +69,7 @@ export const adminService = {
     await api.patch(`/admin/users/${userId}/wallet`, { amount });
   },
 
-  async listSubscriptionRequests(): Promise<any[]> {
+  async listSubscriptionRequests(): Promise<AdminSubscriptionRequest[]> {
     const response = await api.get("/admin/subscriptions/requests");
     return response.data;
   },
@@ -19,23 +78,33 @@ export const adminService = {
     await api.post(`/admin/subscriptions/${subscriptionId}/approve`);
   },
 
-  async getStats(): Promise<any> {
+  async getStats(): Promise<AdminStats> {
     const response = await api.get("/admin/stats");
     return response.data;
   },
 
-  async listAdmins(): Promise<any[]> {
+  async listAdmins(): Promise<AdminUser[]> {
     const response = await api.get("/admin/admins");
     return response.data;
   },
 
-  async updateProfile(data: any): Promise<any> {
+  async getProfile(): Promise<AdminUser> {
+    const response = await api.get("/admin/profile");
+    return response.data;
+  },
+
+  async updateProfile(data: AdminFormInput): Promise<AdminUser> {
     const response = await api.patch("/admin/profile", data);
     return response.data;
   },
 
-  async createAdmin(data: any): Promise<any> {
+  async createAdmin(data: Required<AdminFormInput>): Promise<AdminUser> {
     const response = await api.post("/admin/admins", data);
+    return response.data;
+  },
+
+  async updateAdmin(id: string, data: AdminFormInput): Promise<AdminUser> {
+    const response = await api.patch(`/admin/admins/${id}`, data);
     return response.data;
   },
 };

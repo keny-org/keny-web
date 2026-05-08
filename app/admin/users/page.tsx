@@ -19,7 +19,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { adminService } from "@/services/admin";
+import { useUsers } from "@/hooks/admin/use-users";
 import {
   Coins01Icon,
   Search01Icon,
@@ -27,53 +27,29 @@ import {
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import Image from "next/image";
-import { useEffect, useState } from "react";
-import { toast } from "sonner";
+import { useState } from "react";
 
 export default function UsersPage() {
-  const [users, setUsers] = useState<any[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const { users, isLoading, updateWallet, isUpdatingWallet } = useUsers();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedUser, setSelectedUser] = useState<any>(null);
   const [isWalletDialogOpen, setIsWalletDialogOpen] = useState(false);
   const [kcoinsAmount, setKcoinsAmount] = useState(0);
 
-  const fetchUsers = async () => {
-    setIsLoading(true);
-    try {
-      const data = await adminService.listUsers();
-      setUsers(data);
-    } catch (error) {
-      toast.error("Erro ao carregar usuários");
-      console.error(error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchUsers();
-  }, []);
-
   const handleUpdateWallet = async () => {
     if (!selectedUser || kcoinsAmount <= 0) return;
 
     try {
-      await adminService.updateUserWallet(selectedUser.id, kcoinsAmount);
-      toast.success(
-        `Adicionado ${kcoinsAmount} K-Coins para ${selectedUser.fullName}`,
-      );
+      await updateWallet({ userId: selectedUser.id, amount: kcoinsAmount });
       setIsWalletDialogOpen(false);
       setKcoinsAmount(0);
-      fetchUsers();
     } catch (error) {
-      toast.error("Erro ao atualizar carteira");
-      console.error(error);
+      // Error handled by hook
     }
   };
 
   const filteredUsers = users.filter(
-    (user) =>
+    (user: any) =>
       user.fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
       user.phone.includes(searchTerm) ||
       (user.email &&
@@ -83,15 +59,10 @@ export default function UsersPage() {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <div>
-          <h3 className="text-xl font-semibold">Gerenciar Usuários</h3>
-          <p className="text-muted-foreground">
-            Visualize e gerencie todos os usuários cadastrados no sistema.
-          </p>
-        </div>
+        <h3 className="text-xl font-semibold">Gerenciar Usuários</h3>
       </div>
 
-      <div className="flex items-center gap-4 bg-card p-4 rounded-lg border">
+      <div className="flex items-center gap-4 bg-card p-4  border">
         <div className="relative flex-1">
           <HugeiconsIcon
             icon={Search01Icon}
@@ -107,7 +78,7 @@ export default function UsersPage() {
         </div>
       </div>
 
-      <div className="rounded-md border bg-card">
+      <div className="border bg-card">
         <Table>
           <TableHeader>
             <TableRow>
@@ -136,11 +107,11 @@ export default function UsersPage() {
                 </TableCell>
               </TableRow>
             ) : (
-              filteredUsers.map((user) => (
+              filteredUsers.map((user: any) => (
                 <TableRow key={user.id}>
                   <TableCell>
                     <div className="flex items-center gap-3">
-                      <div className="h-10 w-10 rounded-full bg-muted flex items-center justify-center overflow-hidden relative">
+                      <div className="h-10 w-10 bg-muted flex items-center justify-center overflow-hidden relative">
                         {user.avatarUrl ? (
                           <Image
                             src={user.avatarUrl}
@@ -181,11 +152,11 @@ export default function UsersPage() {
                   </TableCell>
                   <TableCell>
                     {user.subscriptions && user.subscriptions.length > 0 ? (
-                      <span className="px-2 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold border border-primary/20">
+                      <span className="px-2 py-1  bg-primary/10 text-primary text-xs font-bold border border-primary/20">
                         {user.subscriptions[0].plan.title}
                       </span>
                     ) : (
-                      <span className="px-2 py-1 rounded-full bg-secondary text-secondary-foreground text-xs font-medium">
+                      <span className="px-2 py-1  bg-secondary text-secondary-foreground text-xs font-medium">
                         Grátis
                       </span>
                     )}
@@ -216,7 +187,6 @@ export default function UsersPage() {
         </Table>
       </div>
 
-      {/* Wallet Dialog */}
       <Dialog open={isWalletDialogOpen} onOpenChange={setIsWalletDialogOpen}>
         <DialogContent>
           <DialogHeader>
@@ -254,7 +224,9 @@ export default function UsersPage() {
             >
               Cancelar
             </Button>
-            <Button onClick={handleUpdateWallet}>Confirmar Pagamento</Button>
+            <Button onClick={handleUpdateWallet} disabled={isUpdatingWallet}>
+              {isUpdatingWallet ? "Processando..." : "Confirmar Pagamento"}
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

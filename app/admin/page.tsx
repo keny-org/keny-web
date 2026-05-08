@@ -82,11 +82,11 @@ export default function DashboardPage() {
 
       {/* Charts Row */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <div className="bg-card p-6 rounded-xl border">
+        <div className="bg-card p-6  border">
           <h3 className="text-lg font-bold mb-6">
             Crescimento de Usuários (30 dias)
           </h3>
-          <div className="h-[300px] w-full">
+          <div className="h-75 w-full">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={stats.userGrowth}>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} />
@@ -105,9 +105,9 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        <div className="bg-card p-6 rounded-xl border">
+        <div className="bg-card p-6  border">
           <h3 className="text-lg font-bold mb-6">Distribuição de Planos</h3>
-          <div className="h-[300px] w-full">
+          <div className="h-75 w-full">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
@@ -138,7 +138,7 @@ export default function DashboardPage() {
       </div>
 
       {/* Recent Activity */}
-      <div className="bg-card p-6 rounded-xl border">
+      <div className="bg-card p-6  border">
         <div className="flex justify-between items-center mb-6">
           <h3 className="text-lg font-bold">Pedidos de Subscrição Recentes</h3>
           <Button variant="outline" size="sm" asChild>
@@ -155,10 +155,10 @@ export default function DashboardPage() {
             stats.recentRequests.map((req: any) => (
               <div
                 key={req.id}
-                className="flex items-center justify-between p-4 rounded-lg bg-muted/50 border border-transparent hover:border-border transition-colors"
+                className="flex items-center justify-between p-4  bg-muted/50 border border-transparent hover:border-border transition-colors"
               >
                 <div className="flex items-center gap-4">
-                  <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
+                  <div className="h-10 w-10  bg-primary/10 flex items-center justify-center">
                     <HugeiconsIcon
                       className="h-5 w-5 text-primary"
                       icon={User02Icon}
@@ -210,8 +210,8 @@ function StatCard({
   };
 
   return (
-    <div className="bg-card p-6 rounded-xl border flex items-center gap-4">
-      <div className={`p-3 rounded-lg ${colorClasses[color]}`}>
+    <div className="bg-card p-6  border flex items-center gap-4">
+      <div className={`p-3 ${colorClasses[color]}`}>
         <HugeiconsIcon icon={icon} size={24} />
       </div>
       <div>

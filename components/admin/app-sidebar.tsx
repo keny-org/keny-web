@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import {
   Sidebar,
@@ -10,10 +10,18 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar"
-import { CreditCard, Image, LayoutDashboard, Settings, Users } from "lucide-react"
-import Link from "next/link"
-import { usePathname } from "next/navigation"
+} from "@/components/ui/sidebar";
+import {
+  CreditCard,
+  Image as ImageIcon,
+  LayoutDashboard,
+  MessageSquare,
+  Settings,
+  ShieldUser,
+  Users,
+} from "lucide-react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const items = [
   {
@@ -24,7 +32,7 @@ const items = [
   {
     title: "Banners",
     url: "/admin/banners",
-    icon: Image,
+    icon: ImageIcon,
   },
   {
     title: "Usuários",
@@ -32,24 +40,41 @@ const items = [
     icon: Users,
   },
   {
+    title: "Planos",
+    url: "/admin/plans",
+    icon: CreditCard,
+  },
+  {
     title: "Subscrições",
     url: "/admin/subscriptions",
     icon: CreditCard,
+  },
+  {
+    title: "Feedback",
+    url: "/admin/feedback",
+    icon: MessageSquare,
+  },
+  {
+    title: "Administradores",
+    url: "/admin/admins",
+    icon: ShieldUser,
   },
   {
     title: "Configurações",
     url: "/admin/settings",
     icon: Settings,
   },
-]
+];
 
 export function AppSidebar() {
-  const pathname = usePathname()
+  const pathname = usePathname();
 
   return (
     <Sidebar>
       <SidebarHeader className="p-4">
-        <h1 className="text-xl font-bold">KENY Admin</h1>
+        <Link href="/admin" className="flex items-end gap-2">
+          <span className="text-xl font-black tracking-tighter">KENY</span>
+        </Link>
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
@@ -71,5 +96,5 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
     </Sidebar>
-  )
+  );
 }
