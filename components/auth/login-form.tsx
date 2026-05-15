@@ -6,9 +6,13 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
-  FormMessage,
 } from "@/components/ui/form";
+import {
+  Field,
+  FieldContent,
+  FieldLabel,
+  FieldError,
+} from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { api } from "@/lib/api";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -22,8 +26,8 @@ import { toast } from "sonner";
 import * as z from "zod";
 
 const LoginSchema = z.object({
-  username: z.string().min(3, "Username inválido"),
-  password: z.string().min(4, "Senha muito curta"),
+  username: z.string().min(1, "O utilizador é obrigatório").min(3, "Username muito curto"),
+  password: z.string().min(1, "A senha é obrigatória").min(4, "Senha muito curta"),
 });
 
 export default function LoginForm() {
@@ -67,53 +71,61 @@ export default function LoginForm() {
         <FormField
           control={form.control}
           name="username"
-          render={({ field }) => (
+          render={({ field, fieldState }) => (
             <FormItem>
-              <FormLabel>Utilizador</FormLabel>
-              <FormControl>
-                <div className="relative">
-                  <HugeiconsIcon
-                    icon={UserIcon}
-                    size={18}
-                    className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
-                  />
-                  <Input
-                    placeholder="Seu username"
-                    className="pl-10"
-                    {...field}
-                  />
-                </div>
-              </FormControl>
-              <FormMessage />
+              <Field>
+                <FieldLabel>Utilizador</FieldLabel>
+                <FieldContent>
+                  <FormControl>
+                    <div className="relative">
+                      <HugeiconsIcon
+                        icon={UserIcon}
+                        size={18}
+                        className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+                      />
+                      <Input
+                        placeholder="Seu username"
+                        className="pl-10"
+                        {...field}
+                      />
+                    </div>
+                  </FormControl>
+                  <FieldError errors={[fieldState.error]} />
+                </FieldContent>
+              </Field>
             </FormItem>
           )}
         />
         <FormField
           control={form.control}
           name="password"
-          render={({ field }) => (
+          render={({ field, fieldState }) => (
             <FormItem>
-              <FormLabel>Senha</FormLabel>
-              <FormControl>
-                <div className="relative">
-                  <Input
-                    type={showPassword ? "text" : "password"}
-                    placeholder="Insira sua senha"
-                    {...field}
-                  />
-                  <button
-                    type="button"
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground"
-                    onClick={() => setShowPassword(!showPassword)}
-                  >
-                    <HugeiconsIcon
-                      icon={showPassword ? ViewOffIcon : ViewIcon}
-                      size={18}
-                    />
-                  </button>
-                </div>
-              </FormControl>
-              <FormMessage />
+              <Field>
+                <FieldLabel>Senha</FieldLabel>
+                <FieldContent>
+                  <FormControl>
+                    <div className="relative">
+                      <Input
+                        type={showPassword ? "text" : "password"}
+                        placeholder="Insira sua senha"
+                        {...field}
+                      />
+                      <button
+                        type="button"
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+                        onClick={() => setShowPassword(!showPassword)}
+                      >
+                        <HugeiconsIcon
+                          icon={showPassword ? ViewOffIcon : ViewIcon}
+                          size={18}
+                        />
+                      </button>
+                    </div>
+                  </FormControl>
+                  <FieldError errors={[fieldState.error]} />
+                </FieldContent>
+              </Field>
             </FormItem>
           )}
         />

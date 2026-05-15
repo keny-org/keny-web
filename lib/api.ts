@@ -25,7 +25,6 @@ api.interceptors.response.use(
     if (error.response?.status === 401) {
       if (typeof window !== "undefined") {
         Cookies.remove("keny_token");
-        // Only redirect if we're not already on the login page
         if (!window.location.pathname.startsWith("/auth/login")) {
           window.location.href = "/auth/login";
         }

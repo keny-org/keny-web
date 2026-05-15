@@ -8,6 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { TableSkeleton } from "@/components/ui/table-skeleton";
 import type { Banner } from "@/types/banner";
 import {
   Delete02Icon,
@@ -33,6 +34,10 @@ export function BannersTableCard({
   onToggleStatus,
   onDelete,
 }: BannersTableCardProps) {
+  if (isLoading) {
+    return <TableSkeleton columns={6} />;
+  }
+
   return (
     <Card>
       <CardHeader className="border-b">
@@ -51,13 +56,7 @@ export function BannersTableCard({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {isLoading ? (
-              <TableRow>
-                <TableCell colSpan={6} className="py-10 text-center">
-                  Carregando banners...
-                </TableCell>
-              </TableRow>
-            ) : banners.length === 0 ? (
+            {banners.length === 0 ? (
               <TableRow>
                 <TableCell
                   colSpan={6}
@@ -148,7 +147,7 @@ export function BannersTableCard({
                           size={18}
                           className={
                             banner.isActive
-                              ? "text-green-500"
+                              ? "text-primary"
                               : "text-muted-foreground"
                           }
                         />

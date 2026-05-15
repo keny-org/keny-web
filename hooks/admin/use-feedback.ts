@@ -1,5 +1,5 @@
-import { feedbackService, Feedback } from "@/services/feedback";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { feedbackService } from "@/services/feedback";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 export function useFeedback() {

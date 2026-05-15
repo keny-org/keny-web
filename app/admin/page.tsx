@@ -25,7 +25,7 @@ import {
   YAxis,
 } from "recharts";
 
-const COLORS = ["#3b82f6", "#10b981", "#f59e0b", "#ef4444"];
+const COLORS = ["var(--info)", "var(--primary)", "var(--warning)", "var(--destructive)"];
 
 export default function DashboardPage() {
   const [stats, setStats] = useState<any>(null);
@@ -58,54 +58,54 @@ export default function DashboardPage() {
           title="Total de Usuários"
           value={stats.counts.totalUsers}
           icon={UserMultipleIcon}
-          color="blue"
+          variant="info"
         />
         <StatCard
           title="Assinaturas Ativas"
           value={stats.counts.activeSubscriptions}
           icon={CreditCardIcon}
-          color="green"
+          variant="primary"
         />
         <StatCard
           title="Pedidos Pendentes"
           value={stats.counts.pendingSubscriptions}
           icon={Clock01Icon}
-          color="yellow"
+          variant="warning"
         />
         <StatCard
           title="Administradores"
           value={stats.counts.totalAdmins}
           icon={UserIcon}
-          color="purple"
+          variant="secondary"
         />
       </div>
 
       {/* Charts Row */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <div className="bg-card p-6  border">
+        <div className="bg-card p-6 border">
           <h3 className="text-lg font-bold mb-6">
             Crescimento de Usuários (30 dias)
           </h3>
           <div className="h-75 w-full">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={stats.userGrowth}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                <XAxis dataKey="date" />
-                <YAxis />
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border)" />
+                <XAxis dataKey="date" stroke="var(--muted-foreground)" fontSize={12} />
+                <YAxis stroke="var(--muted-foreground)" fontSize={12} />
                 <Tooltip />
                 <Line
                   type="monotone"
                   dataKey="count"
-                  stroke="#3b82f6"
+                  stroke="var(--info)"
                   strokeWidth={2}
-                  dot={{ r: 4 }}
+                  dot={{ r: 4, fill: "var(--info)" }}
                 />
               </LineChart>
             </ResponsiveContainer>
           </div>
         </div>
 
-        <div className="bg-card p-6  border">
+        <div className="bg-card p-6 border">
           <h3 className="text-lg font-bold mb-6">Distribuição de Planos</h3>
           <div className="h-75 w-full">
             <ResponsiveContainer width="100%" height="100%">
@@ -138,7 +138,7 @@ export default function DashboardPage() {
       </div>
 
       {/* Recent Activity */}
-      <div className="bg-card p-6  border">
+      <div className="bg-card p-6 border">
         <div className="flex justify-between items-center mb-6">
           <h3 className="text-lg font-bold">Pedidos de Subscrição Recentes</h3>
           <Button variant="outline" size="sm" asChild>
@@ -155,10 +155,10 @@ export default function DashboardPage() {
             stats.recentRequests.map((req: any) => (
               <div
                 key={req.id}
-                className="flex items-center justify-between p-4  bg-muted/50 border border-transparent hover:border-border transition-colors"
+                className="flex items-center justify-between p-4 bg-muted/50 border border-transparent hover:border-border transition-colors"
               >
                 <div className="flex items-center gap-4">
-                  <div className="h-10 w-10  bg-primary/10 flex items-center justify-center">
+                  <div className="h-10 w-10 bg-primary/10 flex items-center justify-center">
                     <HugeiconsIcon
                       className="h-5 w-5 text-primary"
                       icon={User02Icon}
@@ -175,7 +175,7 @@ export default function DashboardPage() {
                   <p className="text-xs text-muted-foreground">
                     {new Date(req.createdAt).toLocaleString()}
                   </p>
-                  <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400">
+                  <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 border bg-warning/10 text-warning border-warning/20">
                     Pendente
                   </span>
                 </div>
@@ -192,26 +192,23 @@ function StatCard({
   title,
   value,
   icon,
-  color,
+  variant,
 }: {
   title: string;
   value: string | number;
   icon: any;
-  color: string;
+  variant: "info" | "primary" | "warning" | "secondary";
 }) {
-  const colorClasses: Record<string, string> = {
-    blue: "bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400",
-    green:
-      "bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400",
-    yellow:
-      "bg-yellow-100 text-yellow-600 dark:bg-yellow-900/30 dark:text-yellow-400",
-    purple:
-      "bg-purple-100 text-purple-600 dark:bg-purple-900/30 dark:text-purple-400",
+  const variantClasses = {
+    info: "bg-info/10 text-info border-info/20",
+    primary: "bg-primary/10 text-primary border-primary/20",
+    warning: "bg-warning/10 text-warning border-warning/20",
+    secondary: "bg-secondary/10 text-secondary-foreground border-secondary/20",
   };
 
   return (
-    <div className="bg-card p-6  border flex items-center gap-4">
-      <div className={`p-3 ${colorClasses[color]}`}>
+    <div className="bg-card p-6 border flex items-center gap-4">
+      <div className={`p-3 border ${variantClasses[variant]}`}>
         <HugeiconsIcon icon={icon} size={24} />
       </div>
       <div>

@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -8,6 +10,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { TableSkeleton } from "@/components/ui/table-skeleton";
 import type { AdminUser } from "@/services/admin";
 import { PencilEdit01Icon, UserIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
@@ -23,28 +26,37 @@ export function AdminsTableCard({
   isLoading,
   onEdit,
 }: AdminsTableCardProps) {
+  if (isLoading) {
+    return <TableSkeleton columns={4} />;
+  }
+
   return (
     <Card>
       <CardHeader className="border-b">
         <CardTitle>Lista de administradores</CardTitle>
       </CardHeader>
       <CardContent className="px-0">
-        {isLoading ? (
-          <div className="py-12 text-center text-sm text-muted-foreground">
-            Carregando administradores...
-          </div>
-        ) : (
-          <Table>
-            <TableHeader>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="pl-4">Administrador</TableHead>
+              <TableHead>Utilizador</TableHead>
+              <TableHead>Criado em</TableHead>
+              <TableHead className="pr-4 text-right">Ações</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {admins.length === 0 ? (
               <TableRow>
-                <TableHead className="pl-4">Administrador</TableHead>
-                <TableHead>Utilizador</TableHead>
-                <TableHead>Criado em</TableHead>
-                <TableHead className="pr-4 text-right">Ações</TableHead>
+                <TableCell
+                  colSpan={4}
+                  className="py-10 text-center text-muted-foreground"
+                >
+                  Nenhum administrador encontrado.
+                </TableCell>
               </TableRow>
-            </TableHeader>
-            <TableBody>
-              {admins.map((admin) => (
+            ) : (
+              admins.map((admin) => (
                 <TableRow key={admin.id}>
                   <TableCell className="pl-4">
                     <div className="flex items-center gap-3">
@@ -75,10 +87,10 @@ export function AdminsTableCard({
                     </Button>
                   </TableCell>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        )}
+              ))
+            )}
+          </TableBody>
+        </Table>
       </CardContent>
     </Card>
   );
