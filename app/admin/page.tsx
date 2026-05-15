@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { Button } from "@/components/ui/button";
@@ -25,7 +26,12 @@ import {
   YAxis,
 } from "recharts";
 
-const COLORS = ["var(--info)", "var(--primary)", "var(--warning)", "var(--destructive)"];
+const COLORS = [
+  "var(--info)",
+  "var(--primary)",
+  "var(--warning)",
+  "var(--destructive)",
+];
 
 export default function DashboardPage() {
   const [stats, setStats] = useState<any>(null);
@@ -89,8 +95,16 @@ export default function DashboardPage() {
           <div className="h-75 w-full">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={stats.userGrowth}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border)" />
-                <XAxis dataKey="date" stroke="var(--muted-foreground)" fontSize={12} />
+                <CartesianGrid
+                  strokeDasharray="3 3"
+                  vertical={false}
+                  stroke="var(--border)"
+                />
+                <XAxis
+                  dataKey="date"
+                  stroke="var(--muted-foreground)"
+                  fontSize={12}
+                />
                 <YAxis stroke="var(--muted-foreground)" fontSize={12} />
                 <Tooltip />
                 <Line
