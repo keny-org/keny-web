@@ -3,6 +3,7 @@
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
@@ -11,17 +12,21 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { useAdmin } from "@/hooks/admin/use-admin";
 import {
   CreditCard,
   Image as ImageIcon,
   LayoutDashboard,
+  LogOut,
   MessageSquare,
   Settings,
   ShieldUser,
   Users,
 } from "lucide-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import Cookies from "js-cookie";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const items = [
   {
@@ -68,6 +73,13 @@ const items = [
 
 export function AppSidebar() {
   const pathname = usePathname();
+  const router = useRouter();
+  const { profile } = useAdmin();
+
+  const handleLogout = () => {
+    Cookies.remove("keny_token");
+    router.push("/auth/login");
+  };
 
   return (
     <Sidebar>
@@ -95,6 +107,34 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+      <SidebarFooter>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <div className="flex items-center gap-3 p-2">
+              <Avatar className="h-8 w-8 border">
+                <AvatarImage src={""} />
+                <AvatarFallback>
+                  {profile?.fullName?.charAt(0) || "A"}
+                </AvatarFallback>
+              </Avatar>
+              <div className="flex flex-1 flex-col text-left text-sm leading-tight overflow-hidden">
+                <span className="truncate font-semibold">
+                  {profile?.fullName || "Administrador"}
+                </span>
+                <span className="truncate text-xs text-muted-foreground">
+                  @{profile?.username || "admin"}
+                </span>
+              </div>
+            </div>
+          </SidebarMenuItem>
+          <SidebarMenuItem>
+            <SidebarMenuButton onClick={handleLogout} className="text-destructive hover:text-destructive hover:bg-destructive/10">
+              <LogOut className="h-4 w-4" />
+              <span>Sair da conta</span>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarFooter>
     </Sidebar>
   );
 }

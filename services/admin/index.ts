@@ -13,7 +13,7 @@ export interface AdminFormInput {
   password?: string;
 }
 
-interface AdminUserAccount {
+export interface AdminUserAccount {
   id: string;
   fullName: string;
   phone: string;
@@ -30,7 +30,7 @@ interface AdminUserAccount {
   }>;
 }
 
-interface AdminSubscriptionRequest {
+export interface AdminSubscriptionRequest {
   id: string;
   status: string;
   createdAt: string;
@@ -40,6 +40,7 @@ interface AdminSubscriptionRequest {
   };
   plan?: {
     title?: string;
+    price?: string;
   };
   payments?: Array<{
     reference?: string | null;
@@ -47,7 +48,7 @@ interface AdminSubscriptionRequest {
   }>;
 }
 
-interface AdminStats {
+export interface AdminStats {
   counts: {
     totalUsers: number;
     totalAdmins: number;

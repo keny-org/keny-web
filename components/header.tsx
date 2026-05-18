@@ -1,8 +1,8 @@
 "use client";
 
-import Link from "next/link";
-import Image from "next/image";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
+import Link from "next/link";
 
 export function Header() {
   return (
@@ -36,7 +36,7 @@ export function Header() {
 
         <div className="flex items-center gap-4">
           <Button variant="ghost" className="hidden sm:flex" asChild>
-             <Link href="/#download">Download</Link>
+            <Link href="/#download">Download</Link>
           </Button>
           <Button asChild>
             <Link href="/#download">Get Started</Link>

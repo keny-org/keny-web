@@ -2,9 +2,9 @@ import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
-import { ThemeProvider } from "@/components/theme-provider";
+import { ThemeProvider } from "@/components/providers/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
-import { QueryProvider } from "@/components/query-provider";
+import { QueryProvider } from "@/components/providers/query-provider";
 
 const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
