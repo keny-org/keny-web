@@ -60,6 +60,27 @@ export interface AdminStats {
   recentRequests: AdminSubscriptionRequest[];
 }
 
+export interface AdminAccountDeletionRequest {
+  id: string;
+  status: string;
+  reasons: string[];
+  note?: string | null;
+  createdAt: string;
+  approvedAt?: string | null;
+  processedAt?: string | null;
+  user?: {
+    id: string;
+    fullName?: string;
+    phone?: string;
+    email?: string | null;
+  } | null;
+  approvedByAdmin?: {
+    id: string;
+    fullName?: string;
+    username?: string;
+  } | null;
+}
+
 export const adminService = {
   async listUsers(): Promise<AdminUserAccount[]> {
     const response = await api.get("/admin/users");
@@ -77,6 +98,15 @@ export const adminService = {
 
   async approveSubscription(subscriptionId: string): Promise<void> {
     await api.post(`/admin/subscriptions/${subscriptionId}/approve`);
+  },
+
+  async listAccountDeletionRequests(): Promise<AdminAccountDeletionRequest[]> {
+    const response = await api.get("/admin/account-deletions/requests");
+    return response.data;
+  },
+
+  async approveAccountDeletionRequest(requestId: string): Promise<void> {
+    await api.post(`/admin/account-deletions/${requestId}/approve`);
   },
 
   async getStats(): Promise<AdminStats> {

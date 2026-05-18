@@ -21,6 +21,7 @@ import {
   MessageSquare,
   Settings,
   ShieldUser,
+  UserX,
   Users,
 } from "lucide-react";
 import Link from "next/link";
@@ -53,6 +54,11 @@ const items = [
     title: "Subscrições",
     url: "/admin/subscriptions",
     icon: CreditCard,
+  },
+  {
+    title: "Apagar Conta",
+    url: "/admin/account-deletion",
+    icon: UserX,
   },
   {
     title: "Feedback",
