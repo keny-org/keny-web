@@ -1,11 +1,7 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  MoonIcon,
-  Settings02Icon,
-  Sun01Icon,
-} from "@hugeicons/core-free-icons";
+import { MoonIcon, Sun01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { useTheme } from "next-themes";
 
@@ -16,7 +12,6 @@ export function PreferencesCard() {
     <Card>
       <CardHeader className="border-b">
         <div className="flex items-center gap-2">
-          <HugeiconsIcon icon={Settings02Icon} size={20} />
           <CardTitle>Preferências</CardTitle>
         </div>
       </CardHeader>
